@@ -1,8 +1,8 @@
-from database_stuff import add_user
+from app.autoreplybot.database_stuff import add_user
 from datetime import datetime
 import praw
-from models import Users
-from database_stuff import session
+from app.autoreplybot.models import AgorabitWhoMSg
+from app.autoreplybot.database_stuff import session
 now = datetime.utcnow()
 
 
@@ -25,7 +25,9 @@ subject = 'hey man'
 
 modlist = []
 getwork = 1
-verbose = 1
+verbose = 0
+howmany = 5
+
 
 def sendauthormsg(submission, sub):
     if verbose == 1:
@@ -47,10 +49,9 @@ def printheader(submission, sub):
                                   submission.ups,
                                   submission.downs,
                                   submission.id))
+        print("Author: ", submission.author)
+
         print(20 * '#')
-        print('')
-        print('')
-        print('')
 
 
 def printcomments(submission, sub):
@@ -86,7 +87,7 @@ def dothework_noloop(f, sub):
             print(f.author)
             print(20 * '!')
     if getwork == 1:
-        seeifuser = session.query(Users).filter_by(username=str(f.author)).first()
+        seeifuser = session.query(AgorabitWhoMSg).filter_by(username=str(f.author)).first()
         if seeifuser is None:
             print("no user..proceeding to add")
             add_user(datestamp=str(now), subreddit=str(sub), username=str(f.author))
@@ -103,7 +104,7 @@ def dothework(f, sub):
             print(f.author)
             print(20 * '!')
     if getwork == 1:
-        seeifuser = session.query(Users).filter_by(username=str(f.author)).first()
+        seeifuser = session.query(AgorabitWhoMSg).filter_by(username=str(f.author)).first()
         if seeifuser is None:
             print("no user..proceeding to add")
             add_user(datestamp=str(now), subreddit=str(sub), username=str(f.author))
@@ -126,17 +127,24 @@ def send_msg(reddituser, msg, thesubject):
 def main():
     for sub in thesubs:
         subreddit = reddit.subreddit(sub)
-        hot = subreddit.hot(limit=1)
+        hot = subreddit.hot(limit=howmany)
 
         for moderator in reddit.subreddit(sub).moderator():
             modlist.append(moderator)
+
+        if getwork == 0:
+            print("Status: Gathering Intel..")
+        else:
+            print("Status: Work Enabled. Perming botting...")
 
         for submission in hot:
             if not submission.stickied:
                 printheader(submission=submission, sub=sub)
                 sendauthormsg(submission=submission, sub=sub)
                 printcomments(submission=submission, sub=sub)
-
+                print('')
+                print('')
+                print('')
 
 main()
 
