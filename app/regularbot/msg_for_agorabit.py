@@ -1,8 +1,11 @@
-from app.autoreplybot.database_stuff import add_user
+
+from app.regularbot.createuser import new_person
 from datetime import datetime
 import praw
-from app.autoreplybot.models import AgorabitWhoMSg
-from app.autoreplybot.database_stuff import session
+from app.regularbot.models import AgorabitWhoMSg
+from app import session
+
+
 now = datetime.utcnow()
 
 
@@ -90,7 +93,7 @@ def dothework_noloop(f, sub):
         seeifuser = session.query(AgorabitWhoMSg).filter_by(username=str(f.author)).first()
         if seeifuser is None:
             print("no user..proceeding to add")
-            add_user(datestamp=str(now), subreddit=str(sub), username=str(f.author))
+            new_person(datestamp=str(now), subreddit=str(sub), username=str(f.author))
             send_msg(reddituser=f.author, msg=the_message, thesubject=subject)
         else:
             print("Exists. Not adding to db:", seeifuser.username)
@@ -107,7 +110,7 @@ def dothework(f, sub):
         seeifuser = session.query(AgorabitWhoMSg).filter_by(username=str(f.author)).first()
         if seeifuser is None:
             print("no user..proceeding to add")
-            add_user(datestamp=str(now), subreddit=str(sub), username=str(f.author))
+            new_person(datestamp=str(now), subreddit=str(sub), username=str(f.author))
             send_msg(reddituser=f.author, msg=the_message, thesubject=subject)
         else:
             print("Exists. Not adding to db:", seeifuser.username)
@@ -147,5 +150,3 @@ def main():
                 print('')
 
 main()
-
-
