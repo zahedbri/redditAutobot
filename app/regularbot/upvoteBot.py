@@ -6,8 +6,11 @@ from sqlalchemy import func
 import time
 now = datetime.utcnow()
 
+thesubs = ['food']
+
+
 def main(number, submissionid):
-    theuser = session.query(Bots).filter(Bots.id <= 10).order_by(func.rand()).limit(number)
+    theuser = session.query(Bots).order_by(func.rand()).limit(number)
     for user in theuser:
         print("*"*10)
         print("User: ", user.username)
@@ -17,12 +20,12 @@ def main(number, submissionid):
                              user_agent=user.useragent,
                              username=user.username)
 
-
-        x = reddit.submission(id=submissionid)
+        x = reddit.submission(id=submissionid).upvote()
         print(x)
         print(x.title)
+        print("Upvoted!")
         print("*" * 10)
-        #time.sleep(100)
+        time.sleep(100)
 
 
 
