@@ -1,5 +1,5 @@
 
-from app.regularbot.createuser import new_person
+from app.regularbot.addbot import addthebot
 from datetime import datetime
 import praw
 from app.regularbot.models import AgorabitWhoMSg
@@ -8,28 +8,28 @@ from app import session
 
 now = datetime.utcnow()
 
-
-reddit = praw.Reddit(client_id='rqlqlTdlJA5r8g',
-                     client_secret='mZq_vwnY_Li5oKMYD9bL0FaU9ys',
-                     password='ilovecorn1234',
-                     user_agent='correlates data',
-                     username='bloatedgut4354')
+# pick a username to spam with
+reddit = praw.Reddit(client_id='',
+                     client_secret='',
+                     password='',
+                     user_agent='',
+                     username='')
 
 thesubs = ['localbitcoins']
 
 
 # agorabit messaging
-the_message = 'Hey, you should try agorabit.com.' \
-              '  Its got 0 fees, doesnt lock you out,' \
-              ' has btc cash, and doesnt rip you off' \
-              'with wallet fees.  Easier to use too than localbitcoins.'
+the_message = 'add a message to spam' \
+
+
+
 subject = 'hey man'
 #
 
 modlist = []
 getwork = 1
-verbose = 0
-howmany = 5
+verbose = 1
+howmany = 1
 
 
 def sendauthormsg(submission, sub):
@@ -92,9 +92,11 @@ def dothework_noloop(f, sub):
     if getwork == 1:
         seeifuser = session.query(AgorabitWhoMSg).filter_by(username=str(f.author)).first()
         if seeifuser is None:
-            print("no user..proceeding to add")
-            new_person(datestamp=str(now), subreddit=str(sub), username=str(f.author))
+            print("no user..proceeding to add", f.author)
+            addthebot(datestamp=str(now), subreddit=str(sub), username=str(f.author))
+            print("MSG SENT")
             send_msg(reddituser=f.author, msg=the_message, thesubject=subject)
+            print("")
         else:
             print("Exists. Not adding to db:", seeifuser.username)
             pass
@@ -110,7 +112,7 @@ def dothework(f, sub):
         seeifuser = session.query(AgorabitWhoMSg).filter_by(username=str(f.author)).first()
         if seeifuser is None:
             print("no user..proceeding to add")
-            new_person(datestamp=str(now), subreddit=str(sub), username=str(f.author))
+            addthebot(datestamp=str(now), subreddit=str(sub), username=str(f.author))
             send_msg(reddituser=f.author, msg=the_message, thesubject=subject)
         else:
             print("Exists. Not adding to db:", seeifuser.username)

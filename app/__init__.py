@@ -3,6 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_DATABASE_URI_2
 
+
+# session one is regular bot
 # engine 1
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 Base = declarative_base()
@@ -10,7 +12,7 @@ Base.metadata.reflect(bind=engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-
+# session 2 is infobot
 # engine 2
 engine2 = create_engine(SQLALCHEMY_DATABASE_URI_2)
 Base2 = declarative_base()

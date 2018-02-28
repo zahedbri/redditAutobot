@@ -3,8 +3,9 @@ import praw
 from app.regularbot.models import Bots
 from app import session
 from sqlalchemy import func
-import time
+
 now = datetime.utcnow()
+
 
 def main(submissionid, msg):
     theuser = session.query(Bots).filter(Bots.id).order_by(func.rand()).limit(1)

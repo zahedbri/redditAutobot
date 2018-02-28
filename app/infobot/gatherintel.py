@@ -1,6 +1,5 @@
 from app import session2
 from app.infobot.models import FunnyStuff, FoodStuff
-
 import praw
 
 subs = ['funny', 'food', 'pizza', 'sushi']
