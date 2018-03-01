@@ -3,3 +3,4 @@ sqlalchemy
 pytest
 pytest-cov
 psutil
+pymysql
